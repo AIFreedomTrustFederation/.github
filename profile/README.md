@@ -41,3 +41,8 @@ The current public portal is hosted with GitHub Pages:
 
 https://aifreedomtrustfederation.github.io/www.aifreedomtrust.com/
 
+## Aetherion Flight Paper
+
+The flagship Aetherion paper is the federation's current public doctrine and architecture draft for the post-quantum sovereign network, Circleunchain, Biozoecurrency, reverse-priority economics, and the Restorative Waterfall:
+
+https://aifreedomtrustfederation.github.io/AI-Freedom-Trust/docs/aetherion-flight-paper-post-quantum-sovereign-network.md
