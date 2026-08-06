@@ -37,7 +37,21 @@ Before creating or repurposing a repository:
 2. Inspect the candidate repositories and their manifests.
 3. Name exactly one canonical owner.
 4. Define adapter boundaries for every other participant.
-5. Record whether the repository is canonical, supporting, incubating, conceptual, overlapping, or upstream-derived.
-6. Keep working, planned, experimental, and symbolic claims distinct.
+5. Use exactly one authority value from the closed vocabulary below.
+6. Link repository-local or immutable organization evidence for every catalog record.
+7. Keep working, planned, experimental, and symbolic claims distinct.
+
+## Authority vocabulary
+
+| Value | Meaning |
+| --- | --- |
+| `canonical` | Sole implementation authority for the declared capability |
+| `supporting` | Supports a canonical owner without redefining its authority |
+| `incubating` | Experimental implementation that must graduate through the canonical owner |
+| `conceptual` | Specification or concept without implementation authority |
+| `overlapping` | Implementation whose boundary requires an explicit consolidation decision |
+| `upstream-derived` | Fork or vendored upstream runtime integrated only through adapters |
+
+The catalog records the census date, revision, method, evidence location, and a repository evidence link for every record.
 
 The machine-readable source is [`federation.repositories.json`](federation.repositories.json).
