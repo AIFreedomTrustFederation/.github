@@ -1,0 +1,163 @@
+{
+  "schema": "aift.repository-catalog.v1",
+  "authority": "AIFreedomTrustFederation/.github",
+  "generated_from": "GitHub organization census",
+  "rules": {
+    "one_owner_per_capability": true,
+    "upstream_forks_are_runtimes_not_federation_control_planes": true,
+    "concepts_do_not_imply_implementation": true,
+    "repository_truth_requires_local_evidence": true
+  },
+  "repositories": [
+    {
+      "name": "AIFT-OS",
+      "layer": "control-plane",
+      "role": "truth discovery, governance, missions, evidence, federation APIs",
+      "authority": "canonical",
+      "runtime": "Go"
+    },
+    {
+      "name": "AIFT-Genesis",
+      "layer": "genome",
+      "role": "versioned schemas, templates, generators, constitutional technical genome",
+      "authority": "canonical",
+      "runtime": "documents/json-schema"
+    },
+    {
+      "name": "AIFT-Forge",
+      "layer": "forge",
+      "role": "repository, build, package and agent coordination patterns",
+      "authority": "canonical",
+      "runtime": "JavaScript/TypeScript"
+    },
+    {
+      "name": "AIFT-Runtime",
+      "layer": "intelligence-runtime",
+      "role": "local model inference and Aetherion runtime intelligence",
+      "authority": "incubating",
+      "runtime": "undocumented"
+    },
+    {
+      "name": "c-848263",
+      "layer": "experience",
+      "role": "Mysterion Cortex and canonical immersive Living Federation client",
+      "authority": "candidate-canonical",
+      "runtime": "React/TypeScript/D3; migrate spatial core to WebGL"
+    },
+    {
+      "name": "mobox",
+      "layer": "compatibility-runtime",
+      "role": "run Windows x86/x64 applications and games on Android through Wine/Box64",
+      "authority": "upstream-derived",
+      "runtime": "Termux/Wine/Box64/DXVK",
+      "upstream": "olegos2/mobox"
+    },
+    {
+      "name": "VPS",
+      "layer": "infrastructure",
+      "role": "cloud app foundry, nodes, deployments, naming and routing",
+      "authority": "canonical",
+      "runtime": "TypeScript/Next.js"
+    },
+    {
+      "name": "TheMindofAll",
+      "layer": "models",
+      "role": "local model artifact, tokenizer and model-card registry",
+      "authority": "canonical",
+      "runtime": "Git LFS/artifacts"
+    },
+    {
+      "name": "AI-Freedom-Trust",
+      "layer": "public-doctrine",
+      "role": "public doctrine, research, white papers and trust architecture",
+      "authority": "canonical",
+      "runtime": "static/LaTeX/research"
+    },
+    {
+      "name": "www.aifreedomtrust.com",
+      "layer": "public-trust",
+      "role": "canonical public portal and public repository map",
+      "authority": "canonical",
+      "runtime": "static web"
+    },
+    {
+      "name": "aifreedomtrustfederation.github.io",
+      "layer": "public-trust",
+      "role": "organization Pages root or redirect only",
+      "authority": "supporting",
+      "runtime": "static web"
+    },
+    {
+      "name": "AetherianGovernance",
+      "layer": "governance-research",
+      "role": "governance research and specifications; implementation belongs in AIFT-OS",
+      "authority": "incubating",
+      "runtime": "undocumented"
+    },
+    {
+      "name": "Aether_Coin_biozonecurrency",
+      "layer": "stewardship",
+      "role": "wallet and regenerative value protocol research",
+      "authority": "canonical",
+      "runtime": "TypeScript"
+    },
+    {
+      "name": "biozone-harmony-boost",
+      "layer": "stewardship-incubator",
+      "role": "Circleunchain/Biozoe concept UI; graduate reusable work to Aether_Coin_biozonecurrency",
+      "authority": "incubating",
+      "runtime": "React/Vite"
+    },
+    {
+      "name": "booksmith-ai",
+      "layer": "publishing",
+      "role": "canonical authoring, library and publishing production studio",
+      "authority": "canonical",
+      "runtime": "Next.js/TypeScript"
+    },
+    {
+      "name": "BookSmith-Federation-OS",
+      "layer": "publishing-incubator",
+      "role": "product specification and OS concept; must not duplicate Booksmith implementation",
+      "authority": "concept",
+      "runtime": "documents"
+    },
+    {
+      "name": "capital-city-provisions",
+      "layer": "applied-systems",
+      "role": "canonical public provisions business and customer workflow",
+      "authority": "canonical",
+      "runtime": "Next.js"
+    },
+    {
+      "name": "tastycutz",
+      "layer": "applied-systems-incubator",
+      "role": "private stocked-home product and operations implementation; consolidation boundary required",
+      "authority": "overlap-review",
+      "runtime": "Next.js"
+    },
+    {
+      "name": "OpenMontage",
+      "layer": "media-runtime",
+      "role": "agentic video production tool",
+      "authority": "upstream-derived",
+      "runtime": "TypeScript/media",
+      "upstream": "calesthio/OpenMontage"
+    },
+    {
+      "name": "chktex",
+      "layer": "tooling",
+      "role": "vendored/upstream LaTeX lint utility",
+      "authority": "upstream-derived",
+      "runtime": "C",
+      "upstream": "ChkTeX"
+    },
+    {
+      "name": "repo-brainstorm-backend-forge",
+      "layer": "incubator",
+      "role": "private Lovable-generated forge prototype; no canonical backend authority",
+      "authority": "incubating",
+      "runtime": "React/Vite"
+    }
+  ]
+}
