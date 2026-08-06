@@ -1,0 +1,250 @@
+{
+  "schema": "aift.repository-catalog.v1",
+  "authority": "AIFreedomTrustFederation/.github",
+  "rules": {
+    "one_owner_per_capability": true,
+    "upstream_forks_are_runtimes_not_federation_control_planes": true,
+    "concepts_do_not_imply_implementation": true,
+    "repository_truth_requires_local_evidence": true
+  },
+  "repositories": [
+    {
+      "name": ".github",
+      "layer": "federation-metadata",
+      "role": "organization-wide repository ownership catalog, contribution policy and shared metadata",
+      "authority": "canonical",
+      "runtime": "documents/json",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/.github"
+      ]
+    },
+    {
+      "name": "AIFT-OS",
+      "layer": "control-plane",
+      "role": "truth discovery, governance, missions, evidence, federation APIs",
+      "authority": "canonical",
+      "runtime": "Go",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/AIFT-OS"
+      ]
+    },
+    {
+      "name": "AIFT-Genesis",
+      "layer": "genome",
+      "role": "versioned schemas, templates, generators, constitutional technical genome",
+      "authority": "canonical",
+      "runtime": "documents/json-schema",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/AIFT-Genesis"
+      ]
+    },
+    {
+      "name": "AIFT-Forge",
+      "layer": "forge",
+      "role": "repository, build, package and agent coordination patterns",
+      "authority": "canonical",
+      "runtime": "JavaScript/TypeScript",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/AIFT-Forge"
+      ]
+    },
+    {
+      "name": "AIFT-Runtime",
+      "layer": "intelligence-runtime",
+      "role": "local model inference and Aetherion runtime intelligence",
+      "authority": "incubating",
+      "runtime": "undocumented",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/AIFT-Runtime"
+      ]
+    },
+    {
+      "name": "c-848263",
+      "layer": "experience",
+      "role": "Mysterion Cortex and canonical immersive Living Federation client",
+      "authority": "canonical",
+      "runtime": "React/TypeScript/D3; migrate spatial core to WebGL",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/c-848263"
+      ]
+    },
+    {
+      "name": "mobox",
+      "layer": "compatibility-runtime",
+      "role": "run Windows x86/x64 applications and games on Android through Wine/Box64",
+      "authority": "upstream-derived",
+      "runtime": "Termux/Wine/Box64/DXVK",
+      "upstream": "olegos2/mobox",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/mobox"
+      ]
+    },
+    {
+      "name": "VPS",
+      "layer": "infrastructure",
+      "role": "cloud app foundry, nodes, deployments, naming and routing",
+      "authority": "canonical",
+      "runtime": "TypeScript/Next.js",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/VPS"
+      ]
+    },
+    {
+      "name": "TheMindofAll",
+      "layer": "models",
+      "role": "local model artifact, tokenizer and model-card registry",
+      "authority": "canonical",
+      "runtime": "Git LFS/artifacts",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/TheMindofAll"
+      ]
+    },
+    {
+      "name": "AI-Freedom-Trust",
+      "layer": "public-doctrine",
+      "role": "public doctrine, research, white papers and trust architecture",
+      "authority": "canonical",
+      "runtime": "static/LaTeX/research",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/AI-Freedom-Trust"
+      ]
+    },
+    {
+      "name": "www.aifreedomtrust.com",
+      "layer": "public-trust",
+      "role": "canonical public portal and public repository map",
+      "authority": "canonical",
+      "runtime": "static web",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/www.aifreedomtrust.com"
+      ]
+    },
+    {
+      "name": "aifreedomtrustfederation.github.io",
+      "layer": "public-trust",
+      "role": "organization Pages root or redirect only",
+      "authority": "supporting",
+      "runtime": "static web",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/aifreedomtrustfederation.github.io"
+      ]
+    },
+    {
+      "name": "AetherianGovernance",
+      "layer": "governance-research",
+      "role": "governance research and specifications; implementation belongs in AIFT-OS",
+      "authority": "incubating",
+      "runtime": "undocumented",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/AetherianGovernance"
+      ]
+    },
+    {
+      "name": "Aether_Coin_biozonecurrency",
+      "layer": "stewardship",
+      "role": "wallet and regenerative value protocol research",
+      "authority": "canonical",
+      "runtime": "TypeScript",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/Aether_Coin_biozonecurrency"
+      ]
+    },
+    {
+      "name": "biozone-harmony-boost",
+      "layer": "stewardship-incubator",
+      "role": "Circleunchain/Biozoe concept UI; graduate reusable work to Aether_Coin_biozonecurrency",
+      "authority": "incubating",
+      "runtime": "React/Vite",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/biozone-harmony-boost"
+      ]
+    },
+    {
+      "name": "booksmith-ai",
+      "layer": "publishing",
+      "role": "canonical authoring, library and publishing production studio",
+      "authority": "canonical",
+      "runtime": "Next.js/TypeScript",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/booksmith-ai"
+      ]
+    },
+    {
+      "name": "BookSmith-Federation-OS",
+      "layer": "publishing-incubator",
+      "role": "product specification and OS concept; must not duplicate Booksmith implementation",
+      "authority": "conceptual",
+      "runtime": "documents",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/BookSmith-Federation-OS"
+      ]
+    },
+    {
+      "name": "capital-city-provisions",
+      "layer": "applied-systems",
+      "role": "canonical public provisions business and customer workflow",
+      "authority": "canonical",
+      "runtime": "Next.js",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/capital-city-provisions"
+      ]
+    },
+    {
+      "name": "tastycutz",
+      "layer": "applied-systems-incubator",
+      "role": "private stocked-home product and operations implementation; consolidation boundary required",
+      "authority": "overlapping",
+      "runtime": "Next.js",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/tastycutz"
+      ]
+    },
+    {
+      "name": "OpenMontage",
+      "layer": "media-runtime",
+      "role": "agentic video production tool",
+      "authority": "upstream-derived",
+      "runtime": "TypeScript/media",
+      "upstream": "calesthio/OpenMontage",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/OpenMontage"
+      ]
+    },
+    {
+      "name": "chktex",
+      "layer": "tooling",
+      "role": "vendored/upstream LaTeX lint utility",
+      "authority": "upstream-derived",
+      "runtime": "C",
+      "upstream": "ChkTeX",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/chktex"
+      ]
+    },
+    {
+      "name": "repo-brainstorm-backend-forge",
+      "layer": "incubator",
+      "role": "private Lovable-generated forge prototype; no canonical backend authority",
+      "authority": "incubating",
+      "runtime": "React/Vite",
+      "evidence": [
+        "https://github.com/AIFreedomTrustFederation/repo-brainstorm-backend-forge"
+      ]
+    }
+  ],
+  "census": {
+    "revision": "2026-08-06T20:00:00Z",
+    "collected_at": "2026-08-06",
+    "organization": "AIFreedomTrustFederation",
+    "evidence_location": "https://github.com/AIFreedomTrustFederation?tab=repositories",
+    "method": "GitHub organization repository census plus repository-local README and manifest inspection"
+  },
+  "authority_vocabulary": {
+    "canonical": "sole implementation authority for its declared capability",
+    "supporting": "supports a canonical owner without redefining that authority",
+    "incubating": "experimental implementation that must graduate through the canonical owner",
+    "conceptual": "specification or concept without implementation authority",
+    "overlapping": "implementation whose boundary requires an explicit consolidation decision",
+    "upstream-derived": "fork or vendored upstream runtime integrated only through adapters"
+  }
+}
