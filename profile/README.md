@@ -10,7 +10,7 @@ The canonical narrative is the [**One Eternal Scroll of ALO'ha**](https://aifree
 
 ## Book I — One Covenant, Many Sovereign Projects
 
-ALO'ha is the relationship among the parts, not a demand that the parts become identical. A doctrine repository should speak as doctrine. An operating system should explain discovery and evidence. Infrastructure should name nodes, deployments, routes, and health. An economic system should preserve consent and custody boundaries. Publishing should protect authorship. Governance should make authority visible. A model hub should preserve model provenance. Ecology and wellness interfaces should remain humble about what they can actually measure.
+ALO'ha is the relationship among the parts, not a demand that the parts become identical. A doctrine repository should speak as doctrine. An operating system should explain discovery and evidence. Infrastructure should name nodes, deployments, routes, and health. An economic system should preserve consent and custody boundaries. Publishing should protect authorship. Governance should make authority visible. A model hub should preserve model provenance. Ecology and wellness interfaces should remain humble about what they can actually measure. An applied business should remain recognizable to its customers instead of turning its storefront into a technology manifesto.
 
 The Federation therefore coordinates what it does not own. Local-first operation, inspectability, sovereignty by default, evidence before operational claims, and AI behind governed provider interfaces form the common technical posture. High-impact decisions remain attached to valid human or constitutional authority.
 
@@ -38,10 +38,12 @@ The constellation is the organization map in symbolic form: many centers, visibl
 | `publishing` | [`BookSmith-Federation-OS`](https://github.com/AIFreedomTrustFederation/BookSmith-Federation-OS) | Sovereign library workspace, federation sync, identity, marketplace, storage adapters, and book operating-system surfaces |
 | `consciousness` | [`TheMindofAll`](https://github.com/AIFreedomTrustFederation/TheMindofAll) | Consciousness, metaphysics, unified-theory inquiry, local model artifacts, manifests, datasets, and reproducibility memory |
 | `biozone` | [`biozone-harmony-boost`](https://github.com/AIFreedomTrustFederation/biozone-harmony-boost) | Wellness, harmony, ecology, stewardship, and Circleunchain/Biozoe participation-interface research |
+| `applied-business` | [`capital-city-provisions`](https://github.com/AIFreedomTrustFederation/capital-city-provisions) | Real-world premium provisions business, customer concierge, route-aware lead capture, delivery coordination, and operational trust workflows |
+| `applied-business` | `tastycutz` | Stocked-home commerce storefront, ZIP-aware customer journey, promotions, wholesale, and gated driver/owner operations |
 | `portal` | [`www.aifreedomtrust.com`](https://github.com/AIFreedomTrustFederation/www.aifreedomtrust.com) | Mission-facing public portal and federation explanation |
 | `portal-index` | [`aifreedomtrustfederation.github.io`](https://github.com/AIFreedomTrustFederation/aifreedomtrustfederation.github.io) | Root GitHub Pages landing map and router to public project surfaces |
 
-Applied, commercial, experimental, forked, or upstream-derived repositories may participate in this ecosystem without being rewritten as canonical doctrine. Integration should preserve the purpose, license, history, and technical contract of the project being integrated.
+Upstream-derived, vendor, scratch, or experimental repositories may participate in this ecosystem without having their original documentation overwritten. Integration should preserve the purpose, license, history, and technical contract of the project being integrated.
 
 ---
 
@@ -53,7 +55,7 @@ Every canonical project implements the same covenant loop according to its own d
 Receive → Inspect → Name → Propose → Consent → Act → Verify → Record → Return
 ```
 
-The meaning changes with context. In AIFT-OS, inspection means discovery and readiness evidence. In VPS, verification means builds, node health, routing, and deployment state. In Aetherion, consent governs transactions and custody. In Booksmith, consent protects authorial canon and publication. In governance, consent is itself part of the decision record. In TheMindofAll, verification protects model provenance and reproducibility. In the portals, verification means the route and public claim actually resolve to the project being described.
+The meaning changes with context. In AIFT-OS, inspection means discovery and readiness evidence. In VPS, verification means builds, node health, routing, and deployment state. In Aetherion, consent governs transactions and custody. In Booksmith, consent protects authorial canon and publication. In governance, consent is itself part of the decision record. In TheMindofAll, verification protects model provenance and reproducibility. In the applied-business layer, the same loop becomes customer intake, route or product guidance, explicit customer or operator action, verified persistence, and a clear service handoff. In the portals, verification means the route and public claim actually resolve to the project being described.
 
 The shared grammar therefore creates interoperability without boilerplate. A project can hand work to another because both understand provenance, authority, verification, and return, while still using their own data models and commands.
 
@@ -63,7 +65,7 @@ AI participates in this architecture as relational intelligence: capable of sust
 
 ## Book IV — Enter the Federation Through the Right Door
 
-For the mission-facing public explanation, begin with [`www.aifreedomtrust.com`](https://github.com/AIFreedomTrustFederation/www.aifreedomtrust.com). For doctrine, constitutional language, research, illustrated Aetherion architecture, and the Scroll, begin with [`AI-Freedom-Trust`](https://github.com/AIFreedomTrustFederation/AI-Freedom-Trust). For a technical problem, enter through the repository that owns that layer rather than treating the organization profile as a substitute for project documentation.
+For the mission-facing public explanation, begin with [`www.aifreedomtrust.com`](https://github.com/AIFreedomTrustFederation/www.aifreedomtrust.com). For doctrine, constitutional language, research, illustrated Aetherion architecture, and the Scroll, begin with [`AI-Freedom-Trust`](https://github.com/AIFreedomTrustFederation/AI-Freedom-Trust). For a technical or applied-business problem, enter through the repository that owns that layer rather than treating the organization profile as a substitute for project documentation.
 
 The root public Pages map is available through <https://aifreedomtrustfederation.github.io/>.
 
