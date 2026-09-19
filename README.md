@@ -33,6 +33,7 @@ GitHub applies these files as defaults across repositories that do not override 
 - Shared issue templates for bugs, project tasks, and research notes.
 - Shared pull request checklist for layer, verification, and risk.
 - Default contribution, security, and conduct guidance.
+- Dependency-free validation of the canonical federation repository catalog.
 
 ## Setup
 
@@ -40,13 +41,18 @@ No runtime setup is required. Edit Markdown files directly.
 
 ## Verification
 
-After changes:
+Run the catalog integrity check with Python 3, then confirm the checkout contains
+only the intended edits:
 
 ```bash
+python3 scripts/validate_repository_catalog.py
 git status --short
 ```
 
-Then review the public profile and a repository issue form in GitHub.
+The validator checks the catalog schema, authority vocabulary, unique repository
+identities, upstream declarations, canonical HTTPS evidence links, and census
+ownership. For changes to community templates or profile content, also review the
+rendered public profile and a repository issue form in GitHub.
 
 ## Roadmap
 
