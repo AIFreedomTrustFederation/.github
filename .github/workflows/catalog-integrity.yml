@@ -29,8 +29,8 @@ jobs:
 
       - name: Validate catalog
         run: |
-          python -m py_compile scripts/validate_repository_catalog.py
+          PYTHONPYCACHEPREFIX="${RUNNER_TEMP}/pycache" python -m py_compile scripts/validate_repository_catalog.py
           python scripts/validate_repository_catalog.py
 
       - name: Confirm validation is non-mutating
-        run: git diff --exit-code
+        run: git diff --exit-code && test -z "$(git status --porcelain)"
