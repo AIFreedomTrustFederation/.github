@@ -27,6 +27,15 @@ def fail(message: str) -> None:
     raise ValueError(message)
 
 
+def reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
+    record: dict[str, object] = {}
+    for key, value in pairs:
+        if key in record:
+            fail(f"duplicate JSON key: {key!r}")
+        record[key] = value
+    return record
+
+
 def require_text(record: dict[str, object], field: str, name: str) -> str:
     value = record.get(field)
     if not isinstance(value, str) or not value.strip():
@@ -35,7 +44,9 @@ def require_text(record: dict[str, object], field: str, name: str) -> str:
 
 
 def validate() -> int:
-    data = json.loads(CATALOG.read_text(encoding="utf-8"))
+    data = json.loads(
+        CATALOG.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_keys
+    )
     if data.get("schema") != EXPECTED_SCHEMA:
         fail(f"schema must be {EXPECTED_SCHEMA!r}")
     if data.get("authority") != EXPECTED_AUTHORITY:
