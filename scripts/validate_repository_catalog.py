@@ -67,9 +67,10 @@ def validate() -> int:
         if not isinstance(record, dict):
             fail(f"repositories[{index}] must be an object")
         name = require_text(record, "name", f"repositories[{index}]")
-        if name in seen_names:
-            fail(f"duplicate repository name: {name}")
-        seen_names.add(name)
+        identity = name.casefold()  # GitHub repository names are case-insensitive.
+        if identity in seen_names:
+            fail(f"duplicate repository name (case-insensitive): {name}")
+        seen_names.add(identity)
 
         for field in ("layer", "role", "runtime"):
             require_text(record, field, name)
