@@ -236,6 +236,7 @@
     "revision": "2026-08-06T20:00:00Z",
     "collected_at": "2026-08-06",
     "organization": "AIFreedomTrustFederation",
+    "repository_count": 22,
     "evidence_location": "https://github.com/AIFreedomTrustFederation?tab=repositories",
     "method": "GitHub organization repository census plus repository-local README and manifest inspection"
   },

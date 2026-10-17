@@ -32,17 +32,22 @@ def catalog(names):
             "canonical", "supporting", "incubating", "conceptual",
             "overlapping", "upstream-derived")},
         "repositories": [entry(name) for name in names],
-        "census": {"organization": "AIFreedomTrustFederation"},
+        "census": {
+            "organization": "AIFreedomTrustFederation",
+            "repository_count": len(names),
+        },
     }
 
 
 class CatalogIdentityTests(unittest.TestCase):
-    def validate(self, names):
+    def validate(self, names, *, document=None):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             (root / "scripts").mkdir()
             (root / "scripts" / "validate_repository_catalog.py").write_bytes(VALIDATOR.read_bytes())
-            (root / "federation.repositories.json").write_text(json.dumps(catalog(names)))
+            (root / "federation.repositories.json").write_text(
+                json.dumps(catalog(names) if document is None else document)
+            )
             return subprocess.run(
                 [sys.executable, str(root / "scripts" / "validate_repository_catalog.py")],
                 capture_output=True, text=True, check=False,
@@ -63,6 +68,34 @@ class CatalogIdentityTests(unittest.TestCase):
         result = self.validate(["AIFT-OS", "aift-os"])
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("duplicate repository name", result.stderr)
+
+    def test_stale_census_rejects_omitted_repository(self):
+        document = catalog(["AIFT-OS", "AIFT-Forge"])
+        document["repositories"].pop()
+        result = self.validate([], document=document)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("catalog contains 1 repositories", result.stderr)
+
+    def test_missing_census_count_rejected(self):
+        document = catalog(["AIFT-OS"])
+        del document["census"]["repository_count"]
+        result = self.validate([], document=document)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("positive integer", result.stderr)
+
+    def test_boolean_census_count_rejected(self):
+        document = catalog(["AIFT-OS"])
+        document["census"]["repository_count"] = True
+        result = self.validate([], document=document)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("positive integer", result.stderr)
+
+    def test_zero_census_count_rejected(self):
+        document = catalog(["AIFT-OS"])
+        document["census"]["repository_count"] = 0
+        result = self.validate([], document=document)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("positive integer", result.stderr)
 
 
 if __name__ == "__main__":

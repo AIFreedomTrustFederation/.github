@@ -51,8 +51,12 @@ git status --short
 
 The validator checks the catalog schema, authority vocabulary, unique repository
 identities, upstream declarations, canonical HTTPS evidence links, and census
-ownership. For changes to community templates or profile content, also review the
-rendered public profile and a repository issue form in GitHub.
+ownership, and agreement between the declared census count and catalog entries.
+This count detects accidental omissions but does not check GitHub's live repository
+inventory or prove that the dated census is current. Compare the live organization
+repository list separately when updating the census. For changes to community
+templates or profile content, also review the rendered public profile and a
+repository issue form in GitHub.
 
 ## Roadmap
 

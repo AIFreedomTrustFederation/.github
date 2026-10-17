@@ -105,6 +105,14 @@ def validate() -> int:
     census = data.get("census")
     if not isinstance(census, dict) or census.get("organization") != "AIFreedomTrustFederation":
         fail("census.organization must identify AIFreedomTrustFederation")
+    recorded_count = census.get("repository_count")
+    if type(recorded_count) is not int or recorded_count < 1:
+        fail("census.repository_count must be a positive integer")
+    if recorded_count != len(repositories):
+        fail(
+            f"census.repository_count is {recorded_count}, "
+            f"but catalog contains {len(repositories)} repositories"
+        )
 
     print(
         f"Validated {len(repositories)} federation repositories "
