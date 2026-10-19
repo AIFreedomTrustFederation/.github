@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
@@ -13,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "federation.repositories.json"
 EXPECTED_SCHEMA = "aift.repository-catalog.v1"
 EXPECTED_AUTHORITY = "AIFreedomTrustFederation/.github"
+REPOSITORY_NAME = re.compile(r"[A-Za-z0-9_.-]{1,100}\Z")
 ALLOWED_AUTHORITIES = {
     "canonical",
     "supporting",
@@ -67,6 +69,8 @@ def validate() -> int:
         if not isinstance(record, dict):
             fail(f"repositories[{index}] must be an object")
         name = require_text(record, "name", f"repositories[{index}]")
+        if name in {".", ".."} or REPOSITORY_NAME.fullmatch(name) is None:
+            fail(f"{name}: invalid GitHub repository name")
         identity = name.casefold()  # GitHub repository names are case-insensitive.
         if identity in seen_names:
             fail(f"duplicate repository name (case-insensitive): {name}")

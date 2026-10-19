@@ -64,6 +64,31 @@ class CatalogIdentityTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("duplicate repository name", result.stderr)
 
+    def test_slash_and_traversal_name_rejected(self):
+        result = self.validate(["AIFT-OS/../VPS"])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("invalid GitHub repository name", result.stderr)
+
+    def test_whitespace_name_rejected(self):
+        result = self.validate(["bad repo"])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("invalid GitHub repository name", result.stderr)
+
+    def test_url_delimiter_name_rejected(self):
+        result = self.validate(["repo?tab=issues"])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("invalid GitHub repository name", result.stderr)
+
+    def test_valid_dot_and_underscore_name_passes(self):
+        self.assertEqual(self.validate([".github", "AIFT_OS.v2"]).returncode, 0)
+
+    def test_dot_path_segments_rejected(self):
+        for name in (".", ".."):
+            with self.subTest(name=name):
+                result = self.validate([name])
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("invalid GitHub repository name", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
