@@ -54,6 +54,31 @@ class CatalogIdentityTests(unittest.TestCase):
     def test_single_repository_passes(self):
         self.assertEqual(self.validate(["AIFT-OS"]).returncode, 0)
 
+    def test_valid_repository_name_characters_pass(self):
+        result = self.validate([".github", "AIFT-OS", "www.aifreedomtrust.com", "AIFT_Forge"])
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_path_traversal_repository_name_rejected(self):
+        result = self.validate(["../OtherOrg/repo"])
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("invalid GitHub repository name", result.stderr)
+
+    def test_url_shaped_repository_names_rejected(self):
+        for name in (
+            "AIFT-OS/../../OtherOrg/repo",
+            "AIFT-OS?tab=issues",
+            "AIFT-OS#readme",
+            "AIFT OS",
+            " AIFT-OS ",
+            ".",
+            "..",
+            "AIFT-OS\\\\repo",
+        ):
+            with self.subTest(name=name):
+                result = self.validate([name])
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn("invalid GitHub repository name", result.stderr)
+
     def test_exact_duplicate_rejected(self):
         result = self.validate(["AIFT-OS", "AIFT-OS"])
         self.assertNotEqual(result.returncode, 0)
