@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
@@ -67,6 +68,9 @@ def validate() -> int:
         if not isinstance(record, dict):
             fail(f"repositories[{index}] must be an object")
         name = require_text(record, "name", f"repositories[{index}]")
+        # Validate the repository component before constructing its evidence URL.
+        if name in {".", ".."} or not re.fullmatch(r"[A-Za-z0-9_.-]{1,100}", name):
+            fail(f"repositories[{index}]: invalid GitHub repository name: {name!r}")
         identity = name.casefold()  # GitHub repository names are case-insensitive.
         if identity in seen_names:
             fail(f"duplicate repository name (case-insensitive): {name}")
