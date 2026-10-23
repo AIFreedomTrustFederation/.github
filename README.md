@@ -53,8 +53,11 @@ The validator checks the catalog schema, authority vocabulary, unique repository
 identities, upstream declarations, canonical HTTPS evidence links, and census
 ownership. Repository names must be valid GitHub path components
 (1–100 ASCII letters, digits, dots, underscores, or hyphens; not `.` or `..`).
-This local check prevents misleading canonical evidence URLs but does not
-verify live repository existence or catalog completeness. For changes to
+The validator also rejects non-standard JSON numeric literals (`NaN`,
+`Infinity`, and `-Infinity`), which Python's JSON decoder otherwise accepts but
+strict JSON consumers reject. This local check prevents misleading canonical
+evidence URLs and invalid numeric literals; it does not verify live repository
+existence or catalog completeness. For changes to
 community templates or profile content, also review the rendered public profile
 and a repository issue form in GitHub.
 
