@@ -38,11 +38,14 @@ def catalog(names):
 
 class CatalogIdentityTests(unittest.TestCase):
     def validate(self, names):
+        return self.validate_payload(json.dumps(catalog(names)))
+
+    def validate_payload(self, payload):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             (root / "scripts").mkdir()
             (root / "scripts" / "validate_repository_catalog.py").write_bytes(VALIDATOR.read_bytes())
-            (root / "federation.repositories.json").write_text(json.dumps(catalog(names)))
+            (root / "federation.repositories.json").write_text(payload)
             return subprocess.run(
                 [sys.executable, str(root / "scripts" / "validate_repository_catalog.py")],
                 capture_output=True, text=True, check=False,
@@ -66,6 +69,15 @@ class CatalogIdentityTests(unittest.TestCase):
                 result = self.validate([name])
                 self.assertNotEqual(result.returncode, 0, f"invalid repository name accepted: {name!r}")
                 self.assertIn("invalid GitHub repository name", result.stderr)
+
+    def test_nonstandard_json_numeric_literals_rejected(self):
+        valid = json.dumps(catalog(["AIFT-OS"]))
+        for literal in ("NaN", "Infinity", "-Infinity"):
+            with self.subTest(literal=literal):
+                payload = valid.replace('"census": {', f'"non_standard": {literal}, "census": {{')
+                result = self.validate_payload(payload)
+                self.assertNotEqual(result.returncode, 0, result.stdout)
+                self.assertIn("non-standard JSON numeric constant", result.stderr)
 
     def test_valid_dotted_repository_names_pass(self):
         result = self.validate([".github", "www.aifreedomtrust.com", "c-848263", "aift_runtime"])
