@@ -37,6 +37,10 @@ def reject_duplicate_keys(pairs: list[tuple[str, object]]) -> dict[str, object]:
     return record
 
 
+def reject_non_json_constant(value: str) -> None:
+    fail(f"non-standard JSON numeric constant: {value}")
+
+
 def require_text(record: dict[str, object], field: str, name: str) -> str:
     value = record.get(field)
     if not isinstance(value, str) or not value.strip():
@@ -46,7 +50,9 @@ def require_text(record: dict[str, object], field: str, name: str) -> str:
 
 def validate() -> int:
     data = json.loads(
-        CATALOG.read_text(encoding="utf-8"), object_pairs_hook=reject_duplicate_keys
+        CATALOG.read_text(encoding="utf-8"),
+        object_pairs_hook=reject_duplicate_keys,
+        parse_constant=reject_non_json_constant
     )
     if data.get("schema") != EXPECTED_SCHEMA:
         fail(f"schema must be {EXPECTED_SCHEMA!r}")
