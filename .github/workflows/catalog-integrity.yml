@@ -27,11 +27,18 @@ jobs:
         with:
           python-version: "3.13"
 
-      - name: Validate catalog
+      - name: Validate catalog and emit verification evidence
         run: |
-          PYTHONPYCACHEPREFIX="${RUNNER_TEMP}/pycache" python -m py_compile scripts/validate_repository_catalog.py
-          python scripts/validate_repository_catalog.py
-          python -B -m unittest discover -s tests -v
+          PYTHONPYCACHEPREFIX="${RUNNER_TEMP}/pycache" python -m py_compile scripts/validate_repository_catalog.py scripts/run_catalog_verification.py
+          python -B scripts/run_catalog_verification.py --output "${RUNNER_TEMP}/aift-catalog-verification.json"
+
+      - name: Upload verification evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: aift-catalog-verification
+          path: ${{ runner.temp }}/aift-catalog-verification.json
+          if-no-files-found: warn
 
       - name: Confirm validation is non-mutating
         run: git diff --exit-code && test -z "$(git status --porcelain)"
