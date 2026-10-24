@@ -62,6 +62,8 @@ def validate() -> int:
     vocabulary = data.get("authority_vocabulary")
     if not isinstance(vocabulary, dict) or set(vocabulary) != ALLOWED_AUTHORITIES:
         fail("authority_vocabulary must define exactly the supported authority values")
+    for authority_name in sorted(ALLOWED_AUTHORITIES):
+        require_text(vocabulary, authority_name, "authority_vocabulary")
 
     repositories = data.get("repositories")
     if not isinstance(repositories, list) or not repositories:
