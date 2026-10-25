@@ -78,10 +78,10 @@ class VerificationRecordTests(unittest.TestCase):
             (root / "tests").mkdir()
             shutil.copy2(SCRIPT, root / "scripts" / SCRIPT.name)
             validator = root / "scripts" / "validate_repository_catalog.py"
-            validator.write_text("print('valid')\\n")
+            validator.write_text("print('valid')\n")
             (root / "tests" / "test_ok.py").write_text(
-                "import unittest\\nclass T(unittest.TestCase):\\n"
-                "    def test_ok(self): self.assertTrue(True)\\n"
+                "import unittest\nclass T(unittest.TestCase):\n"
+                "    def test_ok(self): self.assertTrue(True)\n"
             )
             subprocess.run(["git", "init", "-q", str(root)], check=True)
             subprocess.run(["git", "-C", str(root), "add", "."], check=True)
@@ -94,7 +94,7 @@ class VerificationRecordTests(unittest.TestCase):
             clean = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True)
             self.assertEqual(clean.returncode, 0, clean.stderr)
             self.assertEqual(json.loads(output.read_text())["checks"][-1]["status"], "passed")
-            validator.write_text("print('uncommitted but valid')\\n")
+            validator.write_text("print('uncommitted but valid')\n")
             dirty = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True)
             self.assertEqual(dirty.returncode, 1, dirty.stderr)
             evidence = json.loads(output.read_text())
