@@ -55,6 +55,54 @@ class VerificationRecordTests(unittest.TestCase):
     def test_empty_checks_never_pass(self):
         self.assertEqual(MODULE.build_record(SHA, [], "local", None)["overall_status"], "failed")
 
+    def test_worktree_check_rejects_uncommitted_tracked_and_untracked_files(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            (root / "tracked.txt").write_text("original")
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(root), "-c", "user.name=Test",
+                            "-c", "user.email=test@example.invalid", "commit", "-qm", "fixture"], check=True)
+            self.assertEqual(MODULE.check_worktree(root)["status"], "passed")
+            (root / "tracked.txt").write_text("modified but not committed")
+            self.assertEqual(MODULE.check_worktree(root)["status"], "failed")
+            subprocess.run(["git", "-C", str(root), "checkout", "--", "tracked.txt"], check=True)
+            (root / "untracked.txt").write_text("not committed")
+            self.assertEqual(MODULE.check_worktree(root)["status"], "failed")
+
+    def test_cli_fails_when_checks_pass_but_checkout_is_dirty(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "repo"
+            root.mkdir()
+            (root / "scripts").mkdir()
+            (root / "tests").mkdir()
+            shutil.copy2(SCRIPT, root / "scripts" / SCRIPT.name)
+            validator = root / "scripts" / "validate_repository_catalog.py"
+            validator.write_text("print('valid')\\n")
+            (root / "tests" / "test_ok.py").write_text(
+                "import unittest\\nclass T(unittest.TestCase):\\n"
+                "    def test_ok(self): self.assertTrue(True)\\n"
+            )
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(root), "-c", "user.name=Test",
+                            "-c", "user.email=test@example.invalid", "commit", "-qm", "fixture"], check=True)
+            sha = subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip()
+            env = {**os.environ, "GITHUB_SHA": sha, "GITHUB_REPOSITORY": MODULE.REPOSITORY}
+            output = Path(directory) / "evidence.json"
+            cmd = [sys.executable, "-B", str(root / "scripts" / SCRIPT.name), "--output", str(output)]
+            clean = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True)
+            self.assertEqual(clean.returncode, 0, clean.stderr)
+            self.assertEqual(json.loads(output.read_text())["checks"][-1]["status"], "passed")
+            validator.write_text("print('uncommitted but valid')\\n")
+            dirty = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True)
+            self.assertEqual(dirty.returncode, 1, dirty.stderr)
+            evidence = json.loads(output.read_text())
+            self.assertEqual(evidence["commit_sha"], sha)
+            self.assertEqual(evidence["overall_status"], "failed")
+            self.assertEqual([c["status"] for c in evidence["checks"]],
+                             ["passed", "passed", "failed"])
+
     def test_cli_records_real_exit_codes_and_checked_out_commit(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -86,7 +134,7 @@ class VerificationRecordTests(unittest.TestCase):
             self.assertEqual(failure.returncode, 1, failure.stderr)
             record = json.loads(output.read_text())
             self.assertEqual(record["overall_status"], "failed")
-            self.assertEqual([c["status"] for c in record["checks"]], ["failed", "passed"])
+            self.assertEqual([c["status"] for c in record["checks"]], ["failed", "passed", "failed"])
             output.unlink()
             env["GITHUB_SHA"] = "b" * 40
             mismatch = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True)
