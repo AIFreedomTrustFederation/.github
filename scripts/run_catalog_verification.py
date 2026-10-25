@@ -43,6 +43,24 @@ def execute_checks(root: Path, python: str = sys.executable, runner=subprocess.r
     return results
 
 
+
+def check_worktree(root: Path) -> dict:
+    """Fail commit-bound evidence if tracked or untracked checkout content differs."""
+    try:
+        result = subprocess.run(
+            ["git", "status", "--porcelain", "--untracked-files=normal"],
+            cwd=root, capture_output=True, text=True, check=False,
+        )
+        exit_code = result.returncode or (1 if result.stdout else 0)
+    except OSError:
+        exit_code = 127
+    return {
+        "id": "worktree", "command": "git status --porcelain --untracked-files=normal",
+        "status": "passed" if exit_code == 0 else "failed",
+        "exit_code": exit_code,
+    }
+
+
 def build_record(commit: str, checks: list[dict], source: str, run_url: str | None) -> dict:
     if not re.fullmatch(r"[0-9a-f]{40}", commit):
         raise ValueError("commit must be an exact 40-character lowercase Git SHA")
@@ -63,6 +81,7 @@ def build_record(commit: str, checks: list[dict], source: str, run_url: str | No
             "This record covers only the local catalog validator and Python regression tests.",
             "It does not establish repository census completeness or live integration health.",
             "The JSON is an unsigned CI artifact, not a cryptographic attestation.",
+            "Worktree checks do not detect ignored files or external runtime state.",
         ],
     }
 
@@ -87,7 +106,16 @@ def main() -> int:
         run_id = os.environ.get("GITHUB_RUN_ID")
         run_url = (f"https://github.com/{REPOSITORY}/actions/runs/{run_id}"
                    if source == "github-actions" and run_id and run_id.isdecimal() else None)
+        # Check both sides of execution: a dirty checkout or tests that mutate
+        # the checkout must never yield a successful commit-bound record.
+        before = check_worktree(ROOT)
         checks = execute_checks(ROOT)
+        after = check_worktree(ROOT)
+        checks.append({
+            "id": "worktree", "command": before["command"] + " (before and after)",
+            "status": "passed" if before["status"] == after["status"] == "passed" else "failed",
+            "exit_code": before["exit_code"] or after["exit_code"],
+        })
         record = build_record(commit, checks, source, run_url)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
