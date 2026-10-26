@@ -103,9 +103,34 @@ class VerificationRecordTests(unittest.TestCase):
             self.assertEqual([c["status"] for c in evidence["checks"]],
                              ["passed", "passed", "failed"])
 
+    def test_cli_rejects_checkout_output_and_symlink_alias(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "repo"
+            (root / "scripts").mkdir(parents=True)
+            shutil.copy2(SCRIPT, root / "scripts" / SCRIPT.name)
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(root), "-c", "user.name=Test",
+                            "-c", "user.email=test@example.invalid",
+                            "commit", "-qm", "fixture"], check=True)
+            alias = Path(directory) / "checkout-alias"
+            alias.symlink_to(root, target_is_directory=True)
+            for output in (root / "evidence.json", alias / "evidence.json"):
+                with self.subTest(output=output):
+                    result = subprocess.run(
+                        [sys.executable, "-B", str(root / "scripts" / SCRIPT.name),
+                         "--output", str(output)],
+                        cwd=root, capture_output=True, text=True,
+                    )
+                    self.assertEqual(result.returncode, 2, result.stderr)
+                    self.assertIn("outside the repository checkout", result.stderr)
+                    self.assertFalse((root / "evidence.json").exists())
+                    self.assertEqual(MODULE.check_worktree(root)["status"], "passed")
+
     def test_cli_records_real_exit_codes_and_checked_out_commit(self):
         with tempfile.TemporaryDirectory() as directory:
-            root = Path(directory)
+            root = Path(directory) / "repo"
+            root.mkdir()
             (root / "scripts").mkdir()
             (root / "tests").mkdir()
             shutil.copy2(SCRIPT, root / "scripts" / SCRIPT.name)
@@ -122,7 +147,7 @@ class VerificationRecordTests(unittest.TestCase):
                             "-c", "user.email=test@example.invalid", "commit", "-qm", "fixture"], check=True)
             sha = subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip()
             env = {**os.environ, "GITHUB_SHA": sha, "GITHUB_REPOSITORY": MODULE.REPOSITORY}
-            output = root / "report.json"
+            output = Path(directory) / "report.json"
             cmd = [sys.executable, "-B", str(root / "scripts" / SCRIPT.name), "--output", str(output)]
             success = subprocess.run(cmd, cwd=root, env=env, capture_output=True, text=True)
             self.assertEqual(success.returncode, 0, success.stderr)

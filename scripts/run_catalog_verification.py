@@ -91,6 +91,11 @@ def main() -> int:
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
+        # Verification must never create or overwrite files inside the
+        # checkout after its clean-worktree checks have completed.
+        output = args.output.resolve()
+        if output.is_relative_to(ROOT.resolve()):
+            raise ValueError("verification output must be outside the repository checkout")
         sha_result = subprocess.run(
             ["git", "rev-parse", "HEAD"], cwd=ROOT,
             capture_output=True, text=True, check=True,
@@ -117,9 +122,9 @@ def main() -> int:
             "exit_code": before["exit_code"] or after["exit_code"],
         })
         record = build_record(commit, checks, source, run_url)
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        print(f"Verification evidence: {args.output} ({record['overall_status']})")
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        print(f"Verification evidence: {output} ({record['overall_status']})")
         return 0 if record["overall_status"] == "passed" else 1
     except (OSError, subprocess.CalledProcessError, ValueError) as error:
         print(f"verification evidence failed: {error}", file=sys.stderr)
