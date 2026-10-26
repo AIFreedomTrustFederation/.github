@@ -103,6 +103,50 @@ class VerificationRecordTests(unittest.TestCase):
             self.assertEqual([c["status"] for c in evidence["checks"]],
                              ["passed", "passed", "failed"])
 
+    def test_cli_rejects_clean_worktree_when_validator_moves_head(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "repo"
+            (root / "scripts").mkdir(parents=True)
+            (root / "tests").mkdir()
+            shutil.copy2(SCRIPT, root / "scripts" / SCRIPT.name)
+            (root / "scripts" / "validate_repository_catalog.py").write_text(
+                "import subprocess\n"
+                "subprocess.run(['git', '-c', 'user.name=Test', "
+                "'-c', 'user.email=test@example.invalid', 'commit', "
+                "'--allow-empty', '-qm', 'QA moved HEAD'], check=True)\n"
+            )
+            (root / "tests" / "test_ok.py").write_text(
+                "import unittest\nclass T(unittest.TestCase):\n"
+                "    def test_ok(self): self.assertTrue(True)\n"
+            )
+            subprocess.run(["git", "init", "-q", str(root)], check=True)
+            subprocess.run(["git", "-C", str(root), "add", "."], check=True)
+            subprocess.run(["git", "-C", str(root), "-c", "user.name=Test",
+                            "-c", "user.email=test@example.invalid",
+                            "commit", "-qm", "fixture"], check=True)
+            original = subprocess.check_output(
+                ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
+            ).strip()
+            env = {**os.environ, "GITHUB_SHA": original,
+                   "GITHUB_REPOSITORY": MODULE.REPOSITORY}
+            output = Path(directory) / "evidence.json"
+            result = subprocess.run(
+                [sys.executable, "-B", str(root / "scripts" / SCRIPT.name),
+                 "--output", str(output)],
+                cwd=root, env=env, capture_output=True, text=True,
+            )
+            self.assertEqual(result.returncode, 1, result.stdout + result.stderr)
+            evidence = json.loads(output.read_text())
+            self.assertEqual(evidence["commit_sha"], original)
+            self.assertEqual(evidence["overall_status"], "failed")
+            self.assertEqual([check["status"] for check in evidence["checks"]],
+                             ["passed", "passed", "failed"])
+            self.assertEqual(MODULE.check_worktree(root)["status"], "passed")
+            final = subprocess.check_output(
+                ["git", "-C", str(root), "rev-parse", "HEAD"], text=True
+            ).strip()
+            self.assertNotEqual(final, original)
+
     def test_cli_rejects_checkout_output_and_symlink_alias(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "repo"

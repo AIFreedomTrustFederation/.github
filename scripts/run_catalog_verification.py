@@ -116,10 +116,22 @@ def main() -> int:
         before = check_worktree(ROOT)
         checks = execute_checks(ROOT)
         after = check_worktree(ROOT)
+        # A clean worktree alone does not prove commit stability: a check
+        # can create an empty commit and move HEAD without changing files.
+        try:
+            final_head = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=ROOT,
+                capture_output=True, text=True, check=False,
+            )
+            head_code = final_head.returncode or (0 if final_head.stdout.strip() == commit else 1)
+        except OSError:
+            head_code = 127
+        worktree_code = before["exit_code"] or after["exit_code"] or head_code
         checks.append({
-            "id": "worktree", "command": before["command"] + " (before and after)",
-            "status": "passed" if before["status"] == after["status"] == "passed" else "failed",
-            "exit_code": before["exit_code"] or after["exit_code"],
+            "id": "worktree",
+            "command": before["command"] + " (before and after); git rev-parse HEAD (after)",
+            "status": "passed" if worktree_code == 0 else "failed",
+            "exit_code": worktree_code,
         })
         record = build_record(commit, checks, source, run_url)
         output.parent.mkdir(parents=True, exist_ok=True)
