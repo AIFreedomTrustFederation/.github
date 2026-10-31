@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import tempfile
 import os
 import re
 import subprocess
@@ -86,6 +87,25 @@ def build_record(commit: str, checks: list[dict], source: str, run_url: str | No
     }
 
 
+def write_record_atomically(output: Path, record: dict) -> None:
+    """Replace evidence only after a complete, flushed same-directory write."""
+    output.parent.mkdir(parents=True, exist_ok=True)
+    staged = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=output.parent,
+            prefix=f".{output.name}.", suffix=".tmp", delete=False,
+        ) as handle:
+            staged = Path(handle.name)
+            handle.write(json.dumps(record, indent=2, sort_keys=True) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(staged, output)
+    finally:
+        if staged is not None:
+            staged.unlink(missing_ok=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
@@ -144,8 +164,7 @@ def main() -> int:
             "exit_code": worktree_code,
         })
         record = build_record(commit, checks, source, run_url)
-        output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        write_record_atomically(output, record)
         print(f"Verification evidence: {output} ({record['overall_status']})")
         return 0 if record["overall_status"] == "passed" else 1
     except (OSError, subprocess.CalledProcessError, ValueError) as error:
