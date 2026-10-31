@@ -101,16 +101,26 @@ def main() -> int:
             capture_output=True, text=True, check=True,
         )
         commit = sha_result.stdout.strip()
-        expected = os.environ.get("GITHUB_SHA")
-        if expected and expected != commit:
-            raise ValueError("GITHUB_SHA does not match the checked-out commit")
-        github_repo = os.environ.get("GITHUB_REPOSITORY")
-        if github_repo and github_repo != REPOSITORY:
-            raise ValueError("GITHUB_REPOSITORY does not match the catalog owner")
         source = "github-actions" if os.environ.get("GITHUB_ACTIONS") == "true" else "local"
+        expected = os.environ.get("GITHUB_SHA")
+        github_repo = os.environ.get("GITHUB_REPOSITORY")
         run_id = os.environ.get("GITHUB_RUN_ID")
+        if source == "github-actions":
+            # In CI, absent identity must never produce passing evidence.
+            if expected != commit:
+                raise ValueError("GITHUB_SHA must match the checked-out commit")
+            if github_repo != REPOSITORY:
+                raise ValueError("GITHUB_REPOSITORY must match the catalog owner")
+            if not run_id or not re.fullmatch(r"[1-9][0-9]{0,19}", run_id):
+                raise ValueError("GITHUB_RUN_ID must be a positive canonical decimal run ID")
+        else:
+            # Preserve existing local verification behavior.
+            if expected and expected != commit:
+                raise ValueError("GITHUB_SHA does not match the checked-out commit")
+            if github_repo and github_repo != REPOSITORY:
+                raise ValueError("GITHUB_REPOSITORY does not match the catalog owner")
         run_url = (f"https://github.com/{REPOSITORY}/actions/runs/{run_id}"
-                   if source == "github-actions" and run_id and run_id.isdecimal() else None)
+                   if source == "github-actions" else None)
         # Check both sides of execution: a dirty checkout or tests that mutate
         # the checkout must never yield a successful commit-bound record.
         before = check_worktree(ROOT)
