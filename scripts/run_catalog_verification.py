@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import datetime as dt
 import json
+import tempfile
 import os
 import re
 import subprocess
@@ -86,40 +87,85 @@ def build_record(commit: str, checks: list[dict], source: str, run_url: str | No
     }
 
 
+def write_record_atomically(output: Path, record: dict) -> None:
+    """Replace evidence only after a complete, flushed same-directory write."""
+    output.parent.mkdir(parents=True, exist_ok=True)
+    staged = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", dir=output.parent,
+            prefix=f".{output.name}.", suffix=".tmp", delete=False,
+        ) as handle:
+            staged = Path(handle.name)
+            handle.write(json.dumps(record, indent=2, sort_keys=True) + "\n")
+            handle.flush()
+            os.fsync(handle.fileno())
+        os.replace(staged, output)
+    finally:
+        if staged is not None:
+            staged.unlink(missing_ok=True)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     try:
+        # Verification must never create or overwrite files inside the
+        # checkout after its clean-worktree checks have completed.
+        output = args.output.resolve()
+        if output.is_relative_to(ROOT.resolve()):
+            raise ValueError("verification output must be outside the repository checkout")
         sha_result = subprocess.run(
             ["git", "rev-parse", "HEAD"], cwd=ROOT,
             capture_output=True, text=True, check=True,
         )
         commit = sha_result.stdout.strip()
-        expected = os.environ.get("GITHUB_SHA")
-        if expected and expected != commit:
-            raise ValueError("GITHUB_SHA does not match the checked-out commit")
-        github_repo = os.environ.get("GITHUB_REPOSITORY")
-        if github_repo and github_repo != REPOSITORY:
-            raise ValueError("GITHUB_REPOSITORY does not match the catalog owner")
         source = "github-actions" if os.environ.get("GITHUB_ACTIONS") == "true" else "local"
+        expected = os.environ.get("GITHUB_SHA")
+        github_repo = os.environ.get("GITHUB_REPOSITORY")
         run_id = os.environ.get("GITHUB_RUN_ID")
+        if source == "github-actions":
+            # In CI, absent identity must never produce passing evidence.
+            if expected != commit:
+                raise ValueError("GITHUB_SHA must match the checked-out commit")
+            if github_repo != REPOSITORY:
+                raise ValueError("GITHUB_REPOSITORY must match the catalog owner")
+            if not run_id or not re.fullmatch(r"[1-9][0-9]{0,19}", run_id):
+                raise ValueError("GITHUB_RUN_ID must be a positive canonical decimal run ID")
+        else:
+            # Preserve existing local verification behavior.
+            if expected and expected != commit:
+                raise ValueError("GITHUB_SHA does not match the checked-out commit")
+            if github_repo and github_repo != REPOSITORY:
+                raise ValueError("GITHUB_REPOSITORY does not match the catalog owner")
         run_url = (f"https://github.com/{REPOSITORY}/actions/runs/{run_id}"
-                   if source == "github-actions" and run_id and run_id.isdecimal() else None)
+                   if source == "github-actions" else None)
         # Check both sides of execution: a dirty checkout or tests that mutate
         # the checkout must never yield a successful commit-bound record.
         before = check_worktree(ROOT)
         checks = execute_checks(ROOT)
         after = check_worktree(ROOT)
+        # A clean worktree alone does not prove commit stability: a check
+        # can create an empty commit and move HEAD without changing files.
+        try:
+            final_head = subprocess.run(
+                ["git", "rev-parse", "HEAD"], cwd=ROOT,
+                capture_output=True, text=True, check=False,
+            )
+            head_code = final_head.returncode or (0 if final_head.stdout.strip() == commit else 1)
+        except OSError:
+            head_code = 127
+        worktree_code = before["exit_code"] or after["exit_code"] or head_code
         checks.append({
-            "id": "worktree", "command": before["command"] + " (before and after)",
-            "status": "passed" if before["status"] == after["status"] == "passed" else "failed",
-            "exit_code": before["exit_code"] or after["exit_code"],
+            "id": "worktree",
+            "command": before["command"] + " (before and after); git rev-parse HEAD (after)",
+            "status": "passed" if worktree_code == 0 else "failed",
+            "exit_code": worktree_code,
         })
         record = build_record(commit, checks, source, run_url)
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        args.output.write_text(json.dumps(record, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-        print(f"Verification evidence: {args.output} ({record['overall_status']})")
+        write_record_atomically(output, record)
+        print(f"Verification evidence: {output} ({record['overall_status']})")
         return 0 if record["overall_status"] == "passed" else 1
     except (OSError, subprocess.CalledProcessError, ValueError) as error:
         print(f"verification evidence failed: {error}", file=sys.stderr)
