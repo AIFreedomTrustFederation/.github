@@ -4,7 +4,7 @@
 
 ## Central architecture package
 
-[AIFT-OS draft PR #92](https://github.com/AIFreedomTrustFederation/AIFT-OS/pull/92) includes native Linux/UEFI/QEMU, safe Windows-class PC and separate Intel Mac/Apple Silicon boot paths, hosted sessions, immersive desktop, future phones/robots, exact-head acceptance, governance/permission limits, and **three accessible, editable SVG infographics** for platform layers, boot/device compatibility and portable embodied intelligence with independent safety.
+[AIFT-OS PR #92 (merged)](https://github.com/AIFreedomTrustFederation/AIFT-OS/pull/92) includes native Linux/UEFI/QEMU, safe Windows-class PC and separate Intel Mac/Apple Silicon boot paths, hosted sessions, immersive desktop, future phones/robots, exact-head acceptance, governance/permission limits, and **three accessible, editable SVG infographics** for platform layers, boot/device compatibility and portable embodied intelligence with independent safety.
 
 ### Proposed delivery and dependency flow
 
@@ -24,32 +24,32 @@ flowchart TD
 
 | Repository | Scope | Proposed documentation change | Delivery |
 |---|---|---|---|
-| AIFT-OS | Core platform + infographic source | [PR #92](https://github.com/AIFreedomTrustFederation/AIFT-OS/pull/92) | Draft |
-| AIFT-Runtime | Host service / capability contracts | [PR #16](https://github.com/AIFreedomTrustFederation/AIFT-Runtime/pull/16) | Draft |
-| AIFT-Forge | App/agent SDK and manifests | [PR #17](https://github.com/AIFreedomTrustFederation/AIFT-Forge/pull/17) | Draft |
-| VPS | Hosted session and release boundaries | [PR #20](https://github.com/AIFreedomTrustFederation/VPS/pull/20) | Draft |
-| www.aifreedomtrust.com | Public Tree versus actual OS desktop | [PR #50](https://github.com/AIFreedomTrustFederation/www.aifreedomtrust.com/pull/50) | Draft |
-| AIFT-Genesis | Tree/schema ownership and lineage | [PR #10](https://github.com/AIFreedomTrustFederation/AIFT-Genesis/pull/10) | Draft |
-| AI-Freedom-Trust | Doctrine/research vs technical evidence | [PR #16](https://github.com/AIFreedomTrustFederation/AI-Freedom-Trust/pull/16) | Draft |
-| AetherianGovernance | Consent, governance and privilege boundaries | [PR #2](https://github.com/AIFreedomTrustFederation/AetherianGovernance/pull/2) | Draft |
-| TheMindofAll | Models/memory and local AI provenance | [PR #7](https://github.com/AIFreedomTrustFederation/TheMindofAll/pull/7) | Draft |
-| mobox | Upstream Android/Termux compatibility | [PR #2](https://github.com/AIFreedomTrustFederation/mobox/pull/2) | Draft; integration under federation/ |
-| BookSmith-Federation-OS | Publishing workspace app | [PR #5](https://github.com/AIFreedomTrustFederation/BookSmith-Federation-OS/pull/5) | Draft |
+| AIFT-OS | Core platform + infographic source | [PR #92](https://github.com/AIFreedomTrustFederation/AIFT-OS/pull/92) | Submitted PR; check live merge state |
+| AIFT-Runtime | Host service / capability contracts | [PR #16](https://github.com/AIFreedomTrustFederation/AIFT-Runtime/pull/16) | Submitted PR; check live merge state |
+| AIFT-Forge | App/agent SDK and manifests | [PR #17](https://github.com/AIFreedomTrustFederation/AIFT-Forge/pull/17) | Submitted PR; check live merge state |
+| VPS | Hosted session and release boundaries | [PR #20](https://github.com/AIFreedomTrustFederation/VPS/pull/20) | Submitted PR; check live merge state |
+| www.aifreedomtrust.com | Public Tree versus actual OS desktop | [PR #50](https://github.com/AIFreedomTrustFederation/www.aifreedomtrust.com/pull/50) | Submitted PR; check live merge state |
+| AIFT-Genesis | Tree/schema ownership and lineage | [PR #10](https://github.com/AIFreedomTrustFederation/AIFT-Genesis/pull/10) | Submitted PR; check live merge state |
+| AI-Freedom-Trust | Doctrine/research vs technical evidence | [PR #16](https://github.com/AIFreedomTrustFederation/AI-Freedom-Trust/pull/16) | Submitted PR; check live merge state |
+| AetherianGovernance | Consent, governance and privilege boundaries | [PR #2](https://github.com/AIFreedomTrustFederation/AetherianGovernance/pull/2) | Submitted PR; check live merge state |
+| TheMindofAll | Models/memory and local AI provenance | [PR #7](https://github.com/AIFreedomTrustFederation/TheMindofAll/pull/7) | Submitted PR; check live merge state |
+| mobox | Upstream Android/Termux compatibility | [PR #2](https://github.com/AIFreedomTrustFederation/mobox/pull/2) | Submitted PR; check live merge state |
+| BookSmith-Federation-OS | Publishing workspace app | [PR #5](https://github.com/AIFreedomTrustFederation/BookSmith-Federation-OS/pull/5) | Submitted PR; check live merge state |
 | booksmith-ai | Author-owned real library application | [main commit](https://github.com/AIFreedomTrustFederation/booksmith-ai/commit/71a86f346cb1e19eb5632163c19ee2d148df7621) | Documentation-only direct main following repo instructions |
-| Aether_Coin_biozonecurrency | Wallet/issuance authority preserved | [PR #10](https://github.com/AIFreedomTrustFederation/Aether_Coin_biozonecurrency/pull/10) | Draft |
-| biozone-harmony-boost | Ecology/wellness optional app | [PR #5](https://github.com/AIFreedomTrustFederation/biozone-harmony-boost/pull/5) | Draft |
-| capital-city-provisions | Independent customer/operations app | [PR #8](https://github.com/AIFreedomTrustFederation/capital-city-provisions/pull/8) | Draft |
-| tastycutz | Independent commerce app | [PR #5](https://github.com/AIFreedomTrustFederation/tastycutz/pull/5) | Draft |
-| .github | Organization catalog boundary | [PR #12](https://github.com/AIFreedomTrustFederation/.github/pull/12) | Draft |
-| aifreedomtrustfederation.github.io | Public route index | [PR #4](https://github.com/AIFreedomTrustFederation/aifreedomtrustfederation.github.io/pull/4) | Draft |
-| c-848263 | Source-backed experience mapping | [PR #6](https://github.com/AIFreedomTrustFederation/c-848263/pull/6) | Draft |
-| repo-brainstorm-backend-forge | Independent app prototype | [PR #4](https://github.com/AIFreedomTrustFederation/repo-brainstorm-backend-forge/pull/4) | Draft |
+| Aether_Coin_biozonecurrency | Wallet/issuance authority preserved | [PR #10](https://github.com/AIFreedomTrustFederation/Aether_Coin_biozonecurrency/pull/10) | Submitted PR; check live merge state |
+| biozone-harmony-boost | Ecology/wellness optional app | [PR #5](https://github.com/AIFreedomTrustFederation/biozone-harmony-boost/pull/5) | Submitted PR; check live merge state |
+| capital-city-provisions | Independent customer/operations app | [PR #8](https://github.com/AIFreedomTrustFederation/capital-city-provisions/pull/8) | Submitted PR; check live merge state |
+| tastycutz | Independent commerce app | [PR #5](https://github.com/AIFreedomTrustFederation/tastycutz/pull/5) | Submitted PR; check live merge state |
+| .github | Organization catalog boundary | [PR #12](https://github.com/AIFreedomTrustFederation/.github/pull/12) | Submitted PR; check live merge state |
+| aifreedomtrustfederation.github.io | Public route index | [PR #4](https://github.com/AIFreedomTrustFederation/aifreedomtrustfederation.github.io/pull/4) | Submitted PR; check live merge state |
+| c-848263 | Source-backed experience mapping | [PR #6](https://github.com/AIFreedomTrustFederation/c-848263/pull/6) | Submitted PR; check live merge state |
+| repo-brainstorm-backend-forge | Independent app prototype | [PR #4](https://github.com/AIFreedomTrustFederation/repo-brainstorm-backend-forge/pull/4) | Submitted PR; check live merge state |
 | OpenMontage | Upstream AI video production app | [PR #3](https://github.com/AIFreedomTrustFederation/OpenMontage/pull/3) | Draft; retain authoritative pipeline |
 | chktex | Upstream LaTeX linter/build utility | [PR #1](https://github.com/AIFreedomTrustFederation/chktex/pull/1) | Draft; retain GNU GPL and README |
 
-Links identify **proposals**, not accepted ownership transfers, merged implementations or verified compatibility.
+Links identify **initial proposals**; check each live PR for its current merge state. A merged documentation PR is not proof of implemented integration, transferred ownership, boot compatibility or approved deployment.
 
-## Review order and source-of-truth protection
+## Review and merge history: source-of-truth protection
 
 1. Review AIFT-OS architecture and diagrams. Check that proposed milestones and safety boundaries are not presented as shipped.
 2. Verify Runtime/Forge/VPS integration contracts independently, without introducing public host privileges.
