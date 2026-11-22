@@ -4,7 +4,7 @@
 
 ## Central architecture package
 
-[AIFT-OS draft PR #92](https://github.com/AIFreedomTrustFederation/AIFT-OS/pull/92) includes native Linux/UEFI/QEMU, safe Windows-class PC and separate Intel Mac/Apple Silicon boot paths, hosted sessions, immersive desktop, future phones/robots, exact-head acceptance, governance/permission limits, and **two accessible editable SVG infographics**.
+[AIFT-OS draft PR #92](https://github.com/AIFreedomTrustFederation/AIFT-OS/pull/92) includes native Linux/UEFI/QEMU, safe Windows-class PC and separate Intel Mac/Apple Silicon boot paths, hosted sessions, immersive desktop, future phones/robots, exact-head acceptance, governance/permission limits, and **three accessible, editable SVG infographics** for platform layers, boot/device compatibility and portable embodied intelligence with independent safety.
 
 ### Proposed delivery and dependency flow
 
