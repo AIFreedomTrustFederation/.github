@@ -71,3 +71,9 @@ and a repository issue form in GitHub.
 ## Public Claims Note
 
 Community-health files should avoid unsupported claims about security guarantees, legal standing, financial value, partnerships, or production readiness. They should define expectations, not overstate capability.
+
+---
+
+## AIFT Universal OS architecture review index
+
+The [federation-wide proposed OS documentation review index](docs/aift-universal-os-review-index.md) links each repository's draft alignment and the central [architecture/infographic package](https://github.com/AIFreedomTrustFederation/AIFT-OS/pull/92). It records proposals only; the existing federation catalog remains authoritative.
