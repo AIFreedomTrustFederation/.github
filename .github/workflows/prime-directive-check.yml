@@ -1,0 +1,26 @@
+name: Federation Prime Directive Documentation Gate
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'FEDERATION-PRIME-DIRECTIVE.md'
+      - 'scripts/check_prime_directive.py'
+      - '.github/workflows/prime-directive-check.yml'
+  pull_request:
+    paths:
+      - 'FEDERATION-PRIME-DIRECTIVE.md'
+      - 'scripts/check_prime_directive.py'
+      - '.github/workflows/prime-directive-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  directive:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+      - name: Validate policy content
+        run: python3 -B scripts/check_prime_directive.py
