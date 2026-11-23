@@ -5,6 +5,7 @@ on:
     paths:
       - 'FEDERATION-PRIME-DIRECTIVE.md'
       - 'scripts/check_prime_directive.py'
+      - 'tests/test_prime_directive.py'
       - '.github/workflows/prime-directive-check.yml'
   pull_request:
     paths:
@@ -24,3 +25,5 @@ jobs:
           persist-credentials: false
       - name: Validate policy content
         run: python3 -B scripts/check_prime_directive.py
+      - name: Offline fail-closed regression tests
+        run: python3 -B -m unittest discover -s tests -p 'test_prime_directive.py' -v
