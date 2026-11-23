@@ -11,6 +11,7 @@ on:
     paths:
       - 'FEDERATION-PRIME-DIRECTIVE.md'
       - 'scripts/check_prime_directive.py'
+      - 'tests/test_prime_directive.py'
       - '.github/workflows/prime-directive-check.yml'
   workflow_dispatch:
 permissions:
